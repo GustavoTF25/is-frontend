@@ -37,7 +37,7 @@ export const MediaPostagem = ({ postagem }: MediaPostageProps) => {
         } else if (extensao === 'mp3' || extensao === 'ogg' || extensao === 'wav' || extensao === 'm4a') {
             return <audio controls src={`http://localhost:8000/${arquivo.arq_caminho}`} />;
         } else {
-            return <p>Formato de arquivo não suportado para reprodução no navegado</p>;
+            return <p>Formato de arquivo não suportado para reprodução no navegador</p>;
         }
     };
 
