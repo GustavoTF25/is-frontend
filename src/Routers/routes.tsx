@@ -16,6 +16,8 @@ import { MusicaPage } from "../Pages/PaginasDrawer/MusicaPage";
 import { WebFicPage } from "../Pages/PaginasDrawer/WebFicPage";
 import { SoftwarePage } from "../Pages/PaginasDrawer/SoftwarePage";
 import { HomePesquisa } from "../Components/HomePesquisa/HomePesquisa";
+import { UsuarioPage } from "../Pages/UsuarioPage/UsuarioPage";
+import { EditarSenha } from "../Pages/EditarSenha/EditarSenha";
 
 export default function AppRouter() {
   const userToken = localStorage.getItem("token"); // exemplo de onde você pode armazenar o token
@@ -26,11 +28,12 @@ export default function AppRouter() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
 
+          {/* Rotas Logadas */}
+          <Route path="criarPostagem" element={userToken ? <CriarPostagem /> : <Pagina404 />} />
+          <Route path="/perfil/:usu_id" element={userToken ? <UsuarioPage /> : <Pagina404 />} />
+          <Route path="/editarSenha/:usu_id" element={userToken ? <EditarSenha /> : <Pagina404 />} />
+
           {/* Rotas do Gerais */}
-          <Route
-            path="criarPostagem"
-            element={userToken ? <CriarPostagem /> : <Pagina404 />}
-          />
           <Route path="/cadastroUsuario" element={<CadastroUsuario />} />
           <Route path="login" element={<LoginUsuario />} />
           <Route path="recuperarSenha" element={<RecuperarSenha />} />
