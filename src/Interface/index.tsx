@@ -11,7 +11,7 @@ export interface IPostagem {
     pos_descricao: string;
     pos_ativo: boolean;
     pos_tags: string;
-    pos_qtdGostei: number;
+    pos_qtdgostei: number;
     pos_data: Date;
     usu_id: number;
     cat_id: number;

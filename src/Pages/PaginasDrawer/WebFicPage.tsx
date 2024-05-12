@@ -23,7 +23,7 @@ export const WebFicPage = () => {
   useEffect(() => {
     axios
       .get<{ response: ICategorias[] }>(
-        `http://localhost:8000/postagens/listarNome/Webfiction`
+        `http://localhost:8000/postagens/listarNome/WebFiction`
       )
       .then(({ data }) => {
         setCategoria(data.response[0]);

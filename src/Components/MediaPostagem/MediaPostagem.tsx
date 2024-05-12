@@ -30,7 +30,7 @@ export const MediaPostagem = ({ postagem }: MediaPostageProps) => {
         }
         const extensao = arquivo.arq_caminho.split('.').pop()?.toLocaleString();
 
-        if (extensao === 'jpg' || extensao === 'jpeg' || extensao === 'png') {
+        if (extensao === 'jpg' || extensao === 'jpeg' || extensao === 'png' || extensao === 'webp') {
             return <img src={`http://localhost:8000/${arquivo.arq_caminho}`} alt="Imagem" />;
         } else if (extensao === 'mp4' || extensao === 'webm' || extensao === 'ogg') {
             return <video controls src={`http://localhost:8000/${arquivo.arq_caminho}`} />;

@@ -34,8 +34,8 @@ declare module '@mui/material/TextField' {
 export const DefaultTheme = createTheme({
     palette: {
         primary: {
-            main: "#673ab7", //"#FF9900"
-            dark: "#512da8",
+            main: "#5C0099", //"#FF9900" // 673ab7
+            dark: "#fff",
             light: "#9575cd",
             contrastText: "#ede7f6",
         },
@@ -46,11 +46,11 @@ export const DefaultTheme = createTheme({
         //     light: "#FFAE00",
         //     contrastText: "#353535",
         // },
-        secondary: {
-            main: "#3f51b5",
+        secondary: { // secondary muda a cor dos botoes
+            main: "#3f51b5",//3f51b5
             dark: "#303f9f",
             light: "#7986cb",
-            contrastText: "#e8eaf6",
+            contrastText: "#fff",
         },
         // secondary: {
         //     main: "#465EFF",
@@ -60,7 +60,7 @@ export const DefaultTheme = createTheme({
         // },
         background: {
             default: "#121212",
-            paper: "#2E336B",
+            paper: "#fff", // Muda a cor dos card
         },
         pedro: {
             main: '#fff',
@@ -73,12 +73,13 @@ export const DefaultTheme = createTheme({
         //     secondary: "#C5C5C5",
         //     disabled: "#C5C5C9",
         // },
-        mode: 'dark'
+        //  mode: 'dark'
     },
 });
 
 export const StyledTextField = styled(TextField)({
     "& .MuiOutlinedInput-notchedOutline": {
-        borderColor: "#C5C5C5",
+        borderColor: "#fff"
     }
+
 });

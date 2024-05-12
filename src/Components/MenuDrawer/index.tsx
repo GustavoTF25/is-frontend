@@ -28,7 +28,7 @@ export const MenuDrawer = () => {
     },
     {
       label: "WebFiction",
-      to: "/webficiton",
+      to: "/webfiction",
     },
     {
       label: "Software",

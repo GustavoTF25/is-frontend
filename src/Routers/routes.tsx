@@ -45,7 +45,7 @@ export default function AppRouter() {
           <Route path="/ilustracao" element={<IlustracaoPage />} />
           <Route path="/animacao" element={<AnimacaoPage />} />
           <Route path="/musica" element={<MusicaPage />} />
-          <Route path="/webficiton" element={<WebFicPage />} />
+          <Route path="/webfiction" element={<WebFicPage />} />
           <Route path="/software" element={<SoftwarePage />} />
           <Route path="/query/:query" element={<HomePesquisa />} />
         </Route>
