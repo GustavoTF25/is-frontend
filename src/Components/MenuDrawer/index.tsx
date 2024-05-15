@@ -45,7 +45,7 @@ export const MenuDrawer = () => {
       <IconButton
         size="large"
         edge="start"
-        color="pedro"
+        style={{color: 'white'}}
         aria-label="logo"
         onClick={() => setIsDrawerOpen(true)}
       >
@@ -59,12 +59,13 @@ export const MenuDrawer = () => {
         <Box
           display={"flex"}
           flexDirection={"column"}
+          style={{backgroundColor: '#F4F4F4'}} // altera a cor do menu drawer
           p={2}
           width={"250px"}
           gap={2}
           textAlign={"center"}
         >
-          <Typography variant="h6" component="div" color={"white"}>
+          <Typography variant="h6" component="div" color={"black"}>
             Categorias
           </Typography>
           <Divider />

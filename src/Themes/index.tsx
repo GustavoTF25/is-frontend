@@ -9,8 +9,10 @@ declare module '@mui/material/styles' {
 
     interface PaletteOptions {
         pedro?: PaletteOptions['primary'];
+
     }
 }
+
 
 declare module '@mui/material/Button' {
     interface ButtonPropsColorOverrides {
@@ -34,7 +36,7 @@ declare module '@mui/material/TextField' {
 export const DefaultTheme = createTheme({
     palette: {
         primary: {
-            main: "#5C0099", //"#FF9900" // 673ab7
+            main: "#7b2cbf", //"#FF9900" // 673ab7
             dark: "#fff",
             light: "#9575cd",
             contrastText: "#ede7f6",
@@ -63,10 +65,13 @@ export const DefaultTheme = createTheme({
             paper: "#fff", // Muda a cor dos card
         },
         pedro: {
-            main: '#fff',
+            main: '#000',
             dark: 'rgba(255, 255, 255, 0.08)',
             light: 'rgba(255, 255, 255, 0.16)',
             contrastText: 'rgba(255, 255, 255, 0.7)',
+        },
+        warning:{
+            main: '#fff'
         },
         // text: {
         //     primary: "#C5C5C9",

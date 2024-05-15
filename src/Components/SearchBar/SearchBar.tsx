@@ -38,10 +38,11 @@ export const SearchBar = () => {
                 <TextField
                     placeholder="Pesquisar"
                     type="text"
-                    variant="outlined"
+                    variant="outlined"  
                     sx={{ width: '400px' }}
                     {...register("query")}
-                    color="pedro"
+                    style={{}}
+                    color='warning'
                     size="small"
                     onChange={(e) => setValue(e.target.value)}
                     value={value}
