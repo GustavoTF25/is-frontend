@@ -34,14 +34,14 @@ export const SearchBar = () => {
 
     return (
         <Box component="form" onSubmit={handleSubmit(PesquisarPostagem)}>
-            <Box display={"flex"} flexDirection={"row"} gap={2}>
+            <Box display={"flex"}  flexDirection={"row"} gap={2}>
                 <TextField
                     placeholder="Pesquisar"
                     type="text"
                     variant="outlined"  
                     sx={{ width: '400px' }}
                     {...register("query")}
-                    style={{}}
+                   // style={{}}
                     color='warning'
                     size="small"
                     onChange={(e) => setValue(e.target.value)}
@@ -55,6 +55,7 @@ export const SearchBar = () => {
 
                         endAdornment: value && (
                             <IconButton
+                            style={{color:'red'}}
                                 aria-label="toggle password visibility"
                                 onClick={() => {
                                     setValue("")
