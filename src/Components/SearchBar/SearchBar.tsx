@@ -39,7 +39,26 @@ export const SearchBar = () => {
                     placeholder="Pesquisar"
                     type="text"
                     variant="outlined"  
-                    sx={{ width: '400px' }}
+                    sx={{ width: '400px',
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: 'white',
+                            },
+                            '&:hover fieldset': {
+                                borderColor: 'white',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: 'white',
+                            },
+                        },
+                        '& .MuiInputBase-input': {
+                              color: 'white',
+                            },
+                        '& .MuiInputBase-input::placeholder': {
+                              color: 'white',
+                            opacity: 1, // Para garantir que a cor seja aplicada
+                        },
+                     }}
                     {...register("query")}
                    // style={{}}
                     color='warning'

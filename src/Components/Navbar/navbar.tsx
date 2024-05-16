@@ -129,9 +129,9 @@ export const Navbar = () => {
               <Avatar
                 src={`http://localhost:8000/${usuFoto}`}
               />
-              <Button color='pedro' variant='text' onClick={() => navigate(`/perfil/${userID}`)}> {userName}  </Button>
+              <Button style={{color: 'white'}} variant='text' onClick={() => navigate(`/perfil/${userID}`)}> {userName}  </Button>
               <Button style={{color: 'white'}} variant='text' onClick={() => navigate('/criarPostagem')}>Publicar</Button>
-              <Button variant='text' color='pedro' onClick={() => {
+              <Button variant='text' style={{color:'white'}} onClick={() => {
                 localStorage.removeItem('token');
                 navigate('/');
                 window.location.reload();
