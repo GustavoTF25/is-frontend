@@ -1,72 +1,58 @@
 import { Box, Button, CircularProgress, Container, Paper, TextField, Typography } from '@mui/material';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod'
+import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { StyledTextField } from '../../Themes';
 import { useState } from 'react';
 
 export const CadastroUsuario = () => {
 
     const navigate = useNavigate();
-
     const [isLoading, setIsLoading] = useState(false);
 
     const createUserFormSchema = z.object({
-        name: z.string().nonempty('campo obrigatorio'),
-        email: z.string().nonempty('campo obrigatorio')
-            .email('Formato de email inválido'),
-        password: z.string().nonempty('campo obrigatorio')
-            .min(8, 'A senha prescisa de no mínimo 8 caracteres'),
-        confirmPassword: z.string().nonempty('campo obrigatorio')
-    })
-        .refine((fields) => fields.password === fields.confirmPassword, {
-            path: ['confirmPassword'],
-            message: 'As Senhas prescisam ser iguais'
-        })
+        name: z.string().nonempty('Campo obrigatório'),
+        email: z.string().nonempty('Campo obrigatório').email('Formato de email inválido'),
+        idade: z.string().nonempty('Campo obrigatório'),
+        password: z.string().nonempty('Campo obrigatório').min(8, 'A senha precisa de no mínimo 8 caracteres'),
+        confirmPassword: z.string().nonempty('Campo obrigatório')
+    }).refine((fields) => fields.password === fields.confirmPassword, {
+        path: ['confirmPassword'],
+        message: 'As senhas precisam ser iguais'
+    });
 
-    type createUserFormData = z.infer<typeof createUserFormSchema>
+    type createUserFormData = z.infer<typeof createUserFormSchema>;
 
     const { register, handleSubmit, formState: { errors } } = useForm<createUserFormData>({
         resolver: zodResolver(createUserFormSchema)
     });
 
-
     const createUser = (data: createUserFormData) => {
-        setIsLoading(true)
+        setIsLoading(true);
 
-        axios
-            .post('http://localhost:8000/usuarios/cadastro', {
-                nome: data.name,
-                email: data.email,
-                senha: data.password,
-            })
-            .then((response) => {
-                //setMensagemErro(true);
-                setIsLoading(false)
-                toast.success('Usuario Cadastrado')
-                setIsLoading(false)
-                navigate('/login');
-            }).catch((error) => {
-                setIsLoading(false)
-                if (error.response.status === 409) {
-                    toast.error('Usuario já cadastrado')
-                } else {
-                    toast.error('Falha ao cadastrar ')
-                }
-                setIsLoading(false)
-
-            });
-
-    }
-
+        axios.post('http://localhost:8000/usuarios/cadastro', {
+            nome: data.name,
+            email: data.email,
+            dataNascimento: data.idade,
+            senha: data.password,
+        }).then((response) => {
+            setIsLoading(false);
+            toast.success('Usuário cadastrado');
+            navigate('/login');
+        }).catch((error) => {
+            setIsLoading(false);
+            if (error.response.status === 409) {
+                toast.error('Usuário já cadastrado');
+            } else {
+                toast.error('Falha ao cadastrar');
+            }
+        });
+    };
 
     return (
-        <Container
-            maxWidth={'md'}
-        >
+        <Container maxWidth={'md'}>
             <Box
                 margin={6}
                 maxWidth={800}
@@ -89,15 +75,9 @@ export const CadastroUsuario = () => {
                     component='form'
                     onSubmit={handleSubmit(createUser)}
                 >
-
-                    <Typography
-                        variant="h4"
-                        align="center"
-                        color={'white'}
-                    >
+                    <Typography variant="h4" align="center" color={'white'}>
                         Cadastro
                     </Typography>
-
 
                     <TextField
                         label="Nome"
@@ -120,6 +100,19 @@ export const CadastroUsuario = () => {
                     />
 
                     <TextField
+                        label="Data de Nascimento"
+                        type="date"
+                        {...register('idade')}
+                        disabled={isLoading}
+                        color='pedro'
+                        helperText={errors.idade?.message}
+                        error={!!errors.idade?.message}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+
+                    <TextField
                         label="Senha"
                         type='password'
                         color='pedro'
@@ -128,6 +121,7 @@ export const CadastroUsuario = () => {
                         error={!!errors.password?.message}
                         disabled={isLoading}
                     />
+
                     <TextField
                         label="Confirmação de senha"
                         type='password'
@@ -137,6 +131,7 @@ export const CadastroUsuario = () => {
                         error={!!errors.confirmPassword?.message}
                         disabled={isLoading}
                     />
+
                     <Box width={'100%'} display={'flex'} justifyContent={'center'} marginTop={2}>
                         <Box>
                             <Button
@@ -145,18 +140,15 @@ export const CadastroUsuario = () => {
                                 size='large'
                                 type='submit'
                                 endIcon={
-                                    isLoading ?
-                                        <CircularProgress
-                                            variant='indeterminate'
-                                            color='inherit'
-                                            size={20}
-                                        />
-                                        : undefined
-                                }>Cadastrar</Button>
+                                    isLoading ? <CircularProgress variant='indeterminate' color='inherit' size={20} /> : undefined
+                                }
+                            >
+                                Cadastrar
+                            </Button>
                         </Box>
                     </Box>
                 </Box>
             </Box>
-        </Container >
-    )
-}
+        </Container>
+    );
+};

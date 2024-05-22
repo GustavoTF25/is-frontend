@@ -36,7 +36,7 @@ declare module '@mui/material/TextField' {
 export const DefaultTheme = createTheme({
     palette: {
         primary: {
-            main: "#7b2cbf", //"#FF9900" // 673ab7
+            main: "#202020", //"#FF9900" // 673ab7
             dark: "#fff",
             light: "#9575cd",
             contrastText: "#ede7f6",
@@ -49,9 +49,9 @@ export const DefaultTheme = createTheme({
         //     contrastText: "#353535",
         // },
         secondary: { // secondary muda a cor dos botoes
-            main: "#3f51b5",//3f51b5
-            dark: "#303f9f",
-            light: "#7986cb",
+            main: "#1167b1 ",//3f51b5
+            dark: "#187bcd",
+            light: "#94003d",
             contrastText: "#fff",
         },
         // secondary: {
