@@ -36,7 +36,7 @@ export interface IUsuario {
     usu_totalPublicacao: string;
     usu_totalFavorito: string;
     usu_status: string;
-    usu_idade: Date;
+    usu_idade: string;
     usu_admin: string;
     usu_datacriado: string;
     usu_foto: string;

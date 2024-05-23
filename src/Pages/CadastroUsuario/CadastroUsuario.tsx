@@ -35,7 +35,7 @@ export const CadastroUsuario = () => {
         axios.post('http://localhost:8000/usuarios/cadastro', {
             nome: data.name,
             email: data.email,
-            dataNascimento: data.idade,
+            idade: data.idade,
             senha: data.password,
         }).then((response) => {
             setIsLoading(false);
