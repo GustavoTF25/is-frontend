@@ -49,8 +49,8 @@ export const DefaultTheme = createTheme({
         //     contrastText: "#353535",
         // },
         secondary: { // secondary muda a cor dos botoes
-            main: "#1167b1 ",//3f51b5
-            dark: "#187bcd",
+            main: "#187bcd ",//1167b1
+            dark: "#1167b1",//187bcd
             light: "#94003d",
             contrastText: "#fff",
         },
