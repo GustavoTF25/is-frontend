@@ -3,6 +3,7 @@ import { CardPostagem } from "../../Components/CardPostagem/CardPostagem"
 import logo from '../../assets/logo2.png'
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API } from "../../axios/axios"
 import { IPostagem } from "../../Interface";
 
 

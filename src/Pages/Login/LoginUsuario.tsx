@@ -86,7 +86,7 @@ export const LoginUsuario = () => {
           component="form"
           onSubmit={handleSubmit(loginUser)}
         >
-          <Typography variant="h4" align="center" color={"white"}>
+          <Typography variant="h4" align="center" color={"black"}>
             Login
           </Typography>
 

@@ -75,7 +75,7 @@ export const CadastroUsuario = () => {
                     component='form'
                     onSubmit={handleSubmit(createUser)}
                 >
-                    <Typography variant="h4" align="center" color={'white'}>
+                    <Typography variant="h4" align="center" color={'black'}>
                         Cadastro
                     </Typography>
 

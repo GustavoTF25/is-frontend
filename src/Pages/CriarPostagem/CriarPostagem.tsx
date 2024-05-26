@@ -118,7 +118,7 @@ export const CriarPostagem = () => {
 
 
                         <Grid item xs={6}>
-                            <Typography variant='h4' color={'white'} marginTop={'-10rem'}>
+                            <Typography variant='h4' color={'black'} marginTop={'-10rem'}>
                                 Criar Postagem
                             </Typography>
                             <Box
@@ -188,7 +188,7 @@ export const CriarPostagem = () => {
                                     disabled={isLoading}
                                 />
                                 <Box>
-                                    <Typography variant='h6' color={'white'}>
+                                    <Typography variant='h6' color={'black'}>
                                         Arquivo
                                     </Typography>
                                     <StyledTextField
@@ -201,7 +201,7 @@ export const CriarPostagem = () => {
                                 <Box
                                     paddingBottom={2}
                                 >
-                                    <Typography variant='h6' color={'white'}>
+                                    <Typography variant='h6' color={'black'}>
                                         Imagem
                                     </Typography>
                                     <StyledTextField
