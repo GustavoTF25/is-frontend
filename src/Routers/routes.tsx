@@ -19,6 +19,7 @@ import { HomePesquisa } from "../Components/HomePesquisa/HomePesquisa";
 import { UsuarioPage } from "../Pages/UsuarioPage/UsuarioPage";
 import { EditarSenha } from "../Pages/EditarSenha/EditarSenha";
 import { DetalheUsuario } from "../Pages/DetalheUsuario/DetalheUsuario";
+//import { PostagensDoUsuario } from "..";
 export default function AppRouter() {
   const userToken = localStorage.getItem("token"); // exemplo de onde você pode armazenar o token
 
