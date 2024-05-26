@@ -1,22 +1,19 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { IUsuario } from "../../Interface";
+import { IPostagem, IUsuario } from "../../Interface";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Container, Paper, Grid, CardMedia, Typography, Button } from "@mui/material";
+import { Box, Container, Paper, Grid, CardMedia, Typography, Button, TextField } from "@mui/material";
 import { ImagemUsuario } from "../../Components/ImagemUsuario/ImagemUsuario";
-
-
-
-
+import { CardPostagem } from "../../Components/CardPostagem/CardPostagem";
 
 export const DetalheUsuario = () => {
     const { usu_id } = useParams();
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     const [usuario, setUsuario] = useState<IUsuario | null>(null);
-
-    console.log('chegou')
-
+    const [listaPostagem, setListaPostagem] = useState<IPostagem[]>([]);
+     
+    
     useEffect(() => {
         axios
             .get<{ response: IUsuario[] }>(
@@ -33,8 +30,27 @@ export const DetalheUsuario = () => {
                 }
             });
     }, []);
+    useEffect(() => {
 
+        axios
+            .get<{ response: IPostagem[] }>(`http://localhost:8000/postagens/detalhe/${usu_id}`)
+            .then(({ data }) => {
+                setListaPostagem(data.response);
+              
+            })
+            .catch((error) => {
+                console.error('Erro ao obter postagens:', error);
+            });
+    }, []);
 
+    const formatDate = (isoDate:string | undefined) => {
+        if (!isoDate) return 'Data desconhecida';
+        const date = new Date(isoDate);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
     return (
         <Container maxWidth={"lg"}>
             <Box
@@ -52,7 +68,7 @@ export const DetalheUsuario = () => {
                 boxShadow={2}
             >
                 <Grid container spacing={5}>
-                    <Grid item xs={8} sm={4}>
+                    <Grid item xs={12} sm={4}>
                         <CardMedia
                             component="img"
                             height="140"
@@ -60,7 +76,7 @@ export const DetalheUsuario = () => {
                             sx={{ borderRadius: "10px", maxHeight: '300px' }}
                         />
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={12} sm={8}>
                         <Box
                             alignItems={"center"}
                             display={"flex"}
@@ -68,16 +84,45 @@ export const DetalheUsuario = () => {
                         >
                             <Typography variant="h4">{usuario?.usu_nome}</Typography>
                         </Box>
-                    </Grid>
-                    <Grid item xs={8} sm={4}>
-                        <Box width={'300px'} >
-                      <Typography>beleza</Typography>
-                        </Box>
-                    </Grid>
+                        <Box
+                            marginTop={"5%"}
+                            alignItems={"center"}
+                            display={"flex"}
+                            justifyContent={"center"}
+                        >   
                     
+                          <Typography sx={{ fontStyle: 'italic' }}>
+                            {usuario?.usu_bio}
+                        </Typography>  
+                
+                   
+                       
+                         
+                        </Box> 
+                        
+
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography >
+                            UsuÃ¡rio desde {formatDate(usuario?.usu_datacriado)}
+                        </Typography>
+                    </Grid>
                 </Grid>
             </Box>
-        </Container>
-    )
+            <Box marginTop={4}>
+                <Typography variant="h5" gutterBottom>
+                    Postagens de {usuario?.usu_nome}
+                </Typography>
+                <Grid container spacing={5}>
+                    {listaPostagem.map((postagem, index) => (
+                        <Grid item xs={12} sm={4} key={index}>
+                            <CardPostagem postagem={postagem} />
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
 
-}
+        </Container>
+    );
+};
+        
