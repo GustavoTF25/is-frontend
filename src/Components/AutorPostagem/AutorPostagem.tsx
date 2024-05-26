@@ -3,7 +3,7 @@ import { IPostagem, IUsuario } from "../../Interface";
 import axios from "axios";
 import { Avatar, Box, Typography } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
-
+import { useNavigate } from 'react-router-dom';
 
 type AutorPostagemProps = {
     postagem: IPostagem;
@@ -13,14 +13,15 @@ type AutorPostagemProps = {
 export const AutorPostagem = ({ postagem }: AutorPostagemProps) => {
 
     const [usuario, setUsuario] = useState<IUsuario | null>(null);
-
+    const navigate = useNavigate();
 
 
     useEffect(() => {
         axios
             .get<{ response: IUsuario[] }>(`http://localhost:8000/usuarios/${postagem.usu_id}/`)
             .then(({ data }) => {
-                setUsuario(data.response[0]);
+                setUsuario(data.response[0]); 
+               // onClick={() => navigate(`/usuario/${postagem.usu_id}`)}
             })
             .catch((error) => {
                 console.error('Erro ao obter detalhes da postagem:', error);
@@ -31,15 +32,22 @@ export const AutorPostagem = ({ postagem }: AutorPostagemProps) => {
             });
 
     }, []);
-
+    const handleUserClick = () => {
+        if (usuario) {
+            navigate(`/usuario/${usuario.usu_id}`);
+        }
+    };
 
     return (
         <>
             <Avatar
                 alt="foto do autor"
                 src={`http://localhost:8000/${usuario?.usu_foto}`}
+                onClick={handleUserClick}
+                style={{ cursor: 'pointer' }} // Adiciona um cursor de ponteiro para indicar que é clicável
+          
             />
-            <Typography variant="body1" >
+            <Typography variant="body1" onClick={handleUserClick} style={{ cursor: 'pointer' }}>
                 {usuario?.usu_nome}
             </Typography>
 
