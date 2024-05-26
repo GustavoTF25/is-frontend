@@ -94,9 +94,6 @@ export const DetalheUsuario = () => {
                           <Typography sx={{ fontStyle: 'italic' }}>
                             {usuario?.usu_bio}
                         </Typography>  
-                
-                   
-                       
                          
                         </Box> 
                         
