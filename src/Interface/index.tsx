@@ -40,6 +40,7 @@ export interface IUsuario {
     usu_admin: string;
     usu_datacriado: string;
     usu_foto: string;
+    usu_bio: string;
 }
 
 export interface IComentarios {

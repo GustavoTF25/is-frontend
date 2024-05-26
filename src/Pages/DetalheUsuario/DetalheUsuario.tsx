@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { IPostagem, IUsuario } from "../../Interface";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Container, Paper, Grid, CardMedia, Typography, Button } from "@mui/material";
+import { Box, Container, Paper, Grid, CardMedia, Typography, Button, TextField } from "@mui/material";
 import { ImagemUsuario } from "../../Components/ImagemUsuario/ImagemUsuario";
 import { CardPostagem } from "../../Components/CardPostagem/CardPostagem";
 
@@ -12,7 +12,7 @@ export const DetalheUsuario = () => {
     const token = localStorage.getItem("token");
     const [usuario, setUsuario] = useState<IUsuario | null>(null);
     const [listaPostagem, setListaPostagem] = useState<IPostagem[]>([]);
-
+     
     
     useEffect(() => {
         axios
@@ -36,14 +36,21 @@ export const DetalheUsuario = () => {
             .get<{ response: IPostagem[] }>(`http://localhost:8000/postagens/detalhe/${usu_id}`)
             .then(({ data }) => {
                 setListaPostagem(data.response);
-                console.log("chamou o id do usuario")
-
+              
             })
             .catch((error) => {
                 console.error('Erro ao obter postagens:', error);
             });
     }, []);
 
+    const formatDate = (isoDate:string | undefined) => {
+        if (!isoDate) return 'Data desconhecida';
+        const date = new Date(isoDate);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
     return (
         <Container maxWidth={"lg"}>
             <Box
@@ -77,11 +84,28 @@ export const DetalheUsuario = () => {
                         >
                             <Typography variant="h4">{usuario?.usu_nome}</Typography>
                         </Box>
+                        <Box
+                            marginTop={"5%"}
+                            alignItems={"center"}
+                            display={"flex"}
+                            justifyContent={"center"}
+                        >   
+                    
+                          <Typography sx={{ fontStyle: 'italic' }}>
+                            {usuario?.usu_bio}
+                        </Typography>  
+                
+                   
+                       
+                         
+                        </Box> 
+                        
+
                     </Grid>
                     <Grid item xs={12}>
-                        <Box>
-                            <Typography variant="body1">Informações adicionais do usuário podem ser colocadas aqui.</Typography>
-                        </Box>
+                        <Typography >
+                            Usuário desde {formatDate(usuario?.usu_datacriado)}
+                        </Typography>
                     </Grid>
                 </Grid>
             </Box>
@@ -97,6 +121,7 @@ export const DetalheUsuario = () => {
                     ))}
                 </Grid>
             </Box>
+
         </Container>
     );
 };
