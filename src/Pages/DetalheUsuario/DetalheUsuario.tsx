@@ -52,10 +52,11 @@ export const DetalheUsuario = () => {
         return `${day}/${month}/${year}`;
     };
     return (
-        <Container maxWidth={"lg"}>
+        <Container maxWidth={'lg'} >
             <Box
                 margin={6}
-                maxWidth={3000}
+                maxWidth={'100%'}
+                width={'95%'}
                 height={"auto"}
                 display={"flex"}
                 gap={1}
@@ -106,7 +107,7 @@ export const DetalheUsuario = () => {
                     </Grid>
                 </Grid>
             </Box>
-            <Box marginTop={4}>
+            <Box marginTop={4} marginLeft={5} >
                 <Typography variant="h5" gutterBottom>
                     Postagens de {usuario?.usu_nome}
                 </Typography>
