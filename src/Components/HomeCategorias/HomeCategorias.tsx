@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ICategorias, IPostagem } from "../../Interface";
 import { Container, Grid } from "@mui/material";
 import { CardPostagem } from "../CardPostagem/CardPostagem";
+import { API, Backend } from "../../axios/axios";
 
 
 type HomeCategoriaProps = {
@@ -15,8 +16,8 @@ export const HomeCategoria = ({ categoria }: HomeCategoriaProps) => {
 
 
     useEffect(() => {
-        axios
-            .get<{ response: IPostagem[] }>(`http://localhost:8000/postagens/listar/${categoria?.cat_id}`)
+        API
+            .get<{ response: IPostagem[] }>(Backend+`/postagens/listar/${categoria?.cat_id}`)
             .then(({ data }) => {
                 setListaPostagem(data.response);
             })

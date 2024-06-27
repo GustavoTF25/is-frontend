@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { z } from "zod";
+import { API, Backend } from "../../axios/axios";
 
 
 
@@ -35,7 +36,7 @@ export const ImagemUsuario = () => {
             formData.append('foto', data.foto);
 
 
-            await axios.post('http://localhost:8000/usuarios/adicionar-nova-foto', formData, {
+            await API.post(Backend+'/usuarios/adicionar-nova-foto', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token}`,

@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { StyledTextField } from '../../Themes';
+import { API, Backend } from '../../axios/axios';
 
 
 
@@ -26,8 +27,8 @@ export const RecuperarSenha = () => {
 
 
     const recuperaSenha = (data: RecuperarSenhaFormData) => {
-        axios
-            .post('http://localhost:8000/usuarios/esqueci-senha', {
+        API
+            .post(Backend+'/usuarios/esqueci-senha', {
                 email: data.email,
             })
             .then((response) => {

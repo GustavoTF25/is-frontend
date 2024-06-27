@@ -2,6 +2,7 @@ import { Avatar, Box, Typography } from "@mui/material"
 import { IComentarios, IUsuario } from "../../Interface";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API, Backend } from "../../axios/axios";
 
 type AutorComentarioProps = {
     comentario: IComentarios;
@@ -13,8 +14,8 @@ export const AutorComentario = ({ comentario }: AutorComentarioProps) => {
 
 
     useEffect(() => {
-        axios
-            .get<{ response: IUsuario[] }>(`http://localhost:8000/usuarios/${comentario.usu_id}/`)
+       API
+            .get<{ response: IUsuario[] }>(Backend+`/usuarios/${comentario.usu_id}/`)
             .then(({ data }) => {
                 setUsuario(data.response[0]);
             })
@@ -31,7 +32,7 @@ export const AutorComentario = ({ comentario }: AutorComentarioProps) => {
         <>
             <Avatar
                 alt="foto do autor o comentario"
-                src={`http://localhost:8000/${usuario?.usu_foto}`}
+                src={Backend+`/${usuario?.usu_foto}`}
             />
             <Box display={'flex'} flexDirection={'column'}>
                 <Typography variant="body2">

@@ -19,6 +19,7 @@ import { HomePesquisa } from "../Components/HomePesquisa/HomePesquisa";
 import { UsuarioPage } from "../Pages/UsuarioPage/UsuarioPage";
 import { EditarSenha } from "../Pages/EditarSenha/EditarSenha";
 import { DetalheUsuario } from "../Pages/DetalheUsuario/DetalheUsuario";
+import { Feed } from "../Pages/Feed/Feed";
 //import { PostagensDoUsuario } from "..";
 export default function AppRouter() {
   const userToken = localStorage.getItem("token"); // exemplo de onde você pode armazenar o token
@@ -31,10 +32,11 @@ export default function AppRouter() {
 
           {/* Rotas Logadas */}
           <Route path="criarPostagem" element={userToken ? <CriarPostagem /> : <Pagina404 />} />
-          <Route path="/perfil/:usu_id" element={userToken ? <UsuarioPage /> : <Pagina404 />} />
+          <Route path="/perfil" element={userToken ? <UsuarioPage /> : <Pagina404 />} />
           <Route path="/editarSenha/:usu_id" element={userToken ? <EditarSenha /> : <Pagina404 />} />
-
+          {/* <Route path="/seguir/:usu_id" element={userToken ? <DetalheUsuario /> : <Pagina404 />} /> */}
           {/* Rotas do Gerais */}
+          <Route path="/feed" element={userToken ? <Feed /> : <Pagina404/> } />
           <Route path="/cadastroUsuario" element={<CadastroUsuario />} />
           <Route path="login" element={<LoginUsuario />} />
           <Route path="recuperarSenha" element={<RecuperarSenha />} />

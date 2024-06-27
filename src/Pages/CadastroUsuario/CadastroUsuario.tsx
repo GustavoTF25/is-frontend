@@ -6,6 +6,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { API, Backend } from '../../axios/axios';
+
 
 export const CadastroUsuario = () => {
 
@@ -32,7 +34,7 @@ export const CadastroUsuario = () => {
     const createUser = (data: createUserFormData) => {
         setIsLoading(true);
 
-        axios.post('http://localhost:8000/usuarios/cadastro', {
+        API.post(Backend+'/usuarios/cadastro', {
             nome: data.name,
             email: data.email,
             idade: data.idade,

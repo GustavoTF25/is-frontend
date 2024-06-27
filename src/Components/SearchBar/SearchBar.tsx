@@ -1,4 +1,4 @@
-import { MdOutlineSearch, MdOutlineCancel } from "react-icons/md";
+import { MdOutlineSearch, MdOutlineCancel, MdSearch } from "react-icons/md";
 import { Box, Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
@@ -85,7 +85,7 @@ export const SearchBar = () => {
                     }}
                 />
                 <Button color="secondary" variant="contained" size="small" type="submit">
-                    Pesquisar
+                    <MdSearch color="white" size={30}></MdSearch>
                 </Button>
             </Box>
         </Box>

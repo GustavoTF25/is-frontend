@@ -4,6 +4,7 @@ import axios from "axios";
 import { Avatar, Box, Typography } from "@mui/material";
 import { AutorComentario } from "../AutorComentario/AutorComentario";
 import eventBus from "../../EventBus/eventBus";
+import { API, Backend } from "../../axios/axios";
 
 type ComentariosPostagemProps = {
   postagem: IPostagem;
@@ -14,9 +15,9 @@ export const ComentariosPostagem = ({ postagem }: ComentariosPostagemProps) => {
   const [usuario, setUsuario] = useState<IUsuario | null>(null);
 
   useEffect(() => {
-    axios
+    API
       .get<{ response: IComentarios[] }>(
-        `http://localhost:8000/postagens/comentarios/${postagem.pos_id}/`
+        Backend+`/postagens/comentarios/${postagem.pos_id}/`
       )
       .then(({ data }) => {
         setComentarios(data.response);

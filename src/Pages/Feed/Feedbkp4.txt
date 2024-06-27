@@ -1,0 +1,140 @@
+import { Box, Container, Grid, Typography, Avatar } from "@mui/material";
+import { CardPostagem } from "../../Components/CardPostagem/CardPostagem";
+import { useEffect, useState } from "react";
+import { API, Backend } from "../../axios/axios";
+import { IPostagem, ISeguir, IUsuario } from "../../Interface";
+import { jwtDecode } from "jwt-decode";
+
+export const Feed = () => {
+  const token = localStorage.getItem("token");
+  const [usu_id, setUsuId] = useState<number | null>(null);
+  const [listaPostagem, setListaPostagem] = useState<IPostagem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [usuariosSeguidos, setUsuariosSeguidos] = useState<IUsuario[]>([]);
+
+  useEffect(() => {
+    if (token) {
+      try {
+        const decodedToken = jwtDecode<{ usu_id: number }>(token);
+        setUsuId(decodedToken.usu_id);
+      } catch (error) {
+        console.error("Erro ao decodificar o token:", error);
+      }
+    }
+  }, [token]);
+
+  useEffect(() => {
+    const fetchUsuariosSeguidos = async () => {
+      if (usu_id) {
+        try {
+          const { data: seguirData } = await API.get<{ response: ISeguir[] }>(`${Backend}/usuarios/seguiu/${usu_id}`, 
+            {
+            headers: {
+              
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          // console.log("usuid",usu_id)
+          const seguidos = seguirData.response;
+          const detalhesUsuarios = await Promise.all(
+            seguidos.map(async (seguir) => {
+              const { data: usuarioData } = await API.get<{ response: IUsuario }>(`${Backend}/usuarios/${seguir.seg_seguindo}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+              // console.log("seguir seg seguidno",seguir.seg_seguindo)
+              return usuarioData.response;
+            })
+          );
+
+          setUsuariosSeguidos(detalhesUsuarios);
+        } catch (error) {
+          console.error("Erro ao obter detalhes dos usuários seguidos:", error);
+        }
+      }
+    };
+
+    fetchUsuariosSeguidos();
+  }, [usu_id, token]);
+
+  useEffect(() => {
+    const fetchPostagens = async () => {
+      try {
+        const allPostagens: IPostagem[] = [];
+        for (const usuario of usuariosSeguidos) {
+          const { data } = await API.get<{ response: IPostagem[] }>(
+            `${Backend}/postagens/detalhe/${usuario.usu_id}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          
+          allPostagens.push(...data.response);
+        }
+        console.log("usario", usuariosSeguidos)
+        setListaPostagem(allPostagens);
+        setIsLoading(false);
+      } catch (error) {
+        console.log("usairos deguidos",usuariosSeguidos)
+        console.error("Erro ao obter postagens:", error);
+        setIsLoading(false);
+      }
+    };
+
+    if (usuariosSeguidos.length > 0) {
+      fetchPostagens();
+    }
+  }, [usuariosSeguidos, token]);
+
+  const randomizeAvatars = (users: IUsuario[], count: number) => {
+    const shuffled = users.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
+
+  return (
+    <Container maxWidth="lg">
+      <Box textAlign="center" marginY={4}>
+        <Typography
+          variant="h4"
+          component="h4"
+          align="center"
+          style={{
+            fontFamily: 'Red Hat Display, sans-serif',
+            fontWeight: 'bold',
+            color: '#primary',
+            fontSize: '2vw',
+          }}
+        >
+          Usuários que você segue
+        </Typography>
+        <Box display="flex" justifyContent="center" alignItems="center" marginY={2}>
+          {randomizeAvatars(usuariosSeguidos, 10).map((usuario) => (
+            <Avatar 
+              key={usuario.usu_id} 
+              title={`Avatar de ${usuario.usu_nome}`} 
+              src={Backend + `/${usuario.usu_foto}`} 
+              style={{ margin: "0 8px" }}
+            />
+          ))}
+        </Box>
+        <Typography variant="subtitle1" color="textSecondary" paragraph>
+          Aqui estão as postagens mais recentes das pessoas que você segue.
+        </Typography>
+      </Box>
+
+      <Grid container spacing={4}>
+        {isLoading ? (
+          <Typography>Carregando...</Typography>
+        ) : (
+          listaPostagem.map((postagem) => (
+            <Grid item xs={12} sm={6} md={4} key={postagem.pos_id}>
+              <CardPostagem postagem={postagem} />
+            </Grid>
+          ))
+        )}
+      </Grid>
+    </Container>
+  );
+};

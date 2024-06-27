@@ -1,3 +1,4 @@
+
 export interface ICategorias {
     cat_id: number;
     cat_nome: string;
@@ -26,6 +27,13 @@ export interface IArquivo {
     pos_id: number;
 }
 
+export interface ISeguir {
+    seg_id: number;
+    seg_seguidor: number; 
+    seg_seguindo: number;
+    seg_valor: number;
+
+}
 
 export interface IUsuario {
     usu_id: number;
@@ -37,6 +45,7 @@ export interface IUsuario {
     usu_status: string;
     usu_idade: string;
     usu_admin: string;
+    usu_totalseguidores: number;
     usu_datacriado: string;
     usu_foto: string;
     usu_bio: string;

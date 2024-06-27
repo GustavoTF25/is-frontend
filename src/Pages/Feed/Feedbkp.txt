@@ -1,0 +1,99 @@
+import { Box, Container, Grid, Typography } from "@mui/material";
+import { CardPostagem } from "../../Components/CardPostagem/CardPostagem";
+import { useEffect, useState } from "react";
+import { API, Backend } from "../../axios/axios";
+import { IPostagem, ISeguir } from "../../Interface";
+import { jwtDecode }  from "jwt-decode";
+
+export const Feed = () => {
+    
+  const token = localStorage.getItem("token");
+  const [usu_id, setUsuId] = useState<number | null>(null);
+  const [listaPostagem, setListaPostagem] = useState<IPostagem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [usuariosSeguidos, setUsuariosSeguidos] = useState<number[]>([]);
+  
+  useEffect(() => {
+    if (token) {
+      try {
+        const decodedToken = jwtDecode<{ usu_id: number }>(token);
+        setUsuId(decodedToken.usu_id);
+        console.log(token);
+      } catch (error) {
+        console.error("Erro ao decodificar o token:", error);
+      }
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (usu_id) {
+      API.get<{ response: ISeguir[] }>(`${Backend}/usuarios/seguiu/${usu_id}`,
+        { 
+          headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then(({ data }) => {
+          const seguidos = data.response.map(seg => seg.seg_seguindo);
+          setUsuariosSeguidos(seguidos);
+          console.log("data resposne",data.response)
+        })
+        .catch((error) => {
+          console.error("Erro ao obter detalhes do usuario:", error);
+        });
+    }
+  }, [usu_id]);
+
+  useEffect(() => {
+    if (usu_id && usuariosSeguidos.length > 0) {
+      API.get<{ response: IPostagem[] }>(`${Backend}/postagens/detalhe/${usuariosSeguidos.map}`, {
+        params: { usuariosSeguidos: usuariosSeguidos.join(",") }
+      })
+        .then(({ data }) => {
+          console.log("data response",data.response)
+          setListaPostagem(data.response);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Erro ao obter postagens:", error);
+        
+          setIsLoading(false);
+        });
+    }
+  }, [usu_id, usuariosSeguidos]);
+console.log("usuid",usu_id)
+  return (
+    <Container maxWidth="lg">
+      <Box textAlign="center" marginY={4}>
+        <Typography
+          variant="h4"
+          component="h4"
+          align="center"
+          style={{
+            fontFamily: 'Red Hat Display, sans-serif',
+            fontWeight: 'bold',
+            color: '#primary',
+            fontSize: '2vw',
+          }}
+        >
+          Postagens que você segue
+        </Typography>
+        <Typography variant="subtitle1" color="textSecondary" paragraph>
+          Aqui estão as postagens mais recentes das pessoas que você segue.
+        </Typography>
+      </Box>
+
+      <Grid container spacing={4}>
+        {isLoading ? (
+          <Typography>Carregando...</Typography>
+        ) : (
+          listaPostagem.map((postagem) => (
+            <Grid item xs={12} sm={6} md={4} key={postagem.pos_id}>
+              <CardPostagem postagem={postagem} />
+            </Grid>
+          ))
+        )}
+      </Grid>
+    </Container>
+  );
+};

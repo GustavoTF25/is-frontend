@@ -2,10 +2,9 @@ import { Button } from "@mui/material";
 import { IPostagem } from "../../Interface";
 import { BiLike } from "react-icons/bi";
 import axios from "axios";
-
 import { toast } from "react-toastify";
 import { useState } from "react";
-
+import { API, Backend } from "../../axios/axios";
 type CurtirPostagemProps = {
   postagem: IPostagem;
 };
@@ -16,10 +15,9 @@ export const CurtirPostagem = ({ postagem }: CurtirPostagemProps) => {
 
   const handleGostei = () => {
     if (token) {
-
     axios
-      .post(
-        `http://localhost:8000/postagens/gostei/${postagem.pos_id}/`,
+      .post(Backend +
+        `/postagens/gostei/${postagem.pos_id}/`,
         {},
         {
           headers: {
@@ -40,12 +38,15 @@ export const CurtirPostagem = ({ postagem }: CurtirPostagemProps) => {
       .catch((error) => {
         toast.error(error.message);
       });
+    }else{
+      toast.error('Necessário estar logado')
     }
   };
 
   return (
     <div>
       <Button
+        size={"large"}
         variant="contained"
         color="secondary"
         onClick={handleGostei}

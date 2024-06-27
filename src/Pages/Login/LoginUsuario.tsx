@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { StyledTextField } from "../../Themes";
 import { useState } from "react";
+import { Backend } from "../../axios/axios";
 
 export const LoginUsuario = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ export const LoginUsuario = () => {
   const loginUser = (data: LoginFormData) => {
     setIsLoading(true);
     axios
-      .post("http://localhost:8000/usuarios/login", {
+      .post(Backend+"/usuarios/login", {
         email: data.email,
         senha: data.password,
       })
