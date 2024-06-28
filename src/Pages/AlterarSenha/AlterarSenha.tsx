@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useLocation, useParams } from 'react-router-dom';
+import { API, Backend } from '../../axios/axios';
 
 
 
@@ -36,8 +37,8 @@ export const AlterarSenha = () => {
 
 
     const recuperaSenha = (data: RecuperarSenhaFormData) => {
-        axios
-            .post(`http://localhost:8000/usuarios/nova-senha?token=${token}`, {
+        API
+            .post(Backend+`/usuarios/nova-senha?token=${token}`, {
                 senha: data.password,
             })
             .then((response) => {

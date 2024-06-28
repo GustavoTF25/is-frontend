@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { API, Backend } from '../../axios/axios';
 
 
 
@@ -41,8 +42,8 @@ export const EditarSenha = () => {
 
 
     const editarSenha = (data: EditarSenhaFormData) => {
-        axios
-            .patch(`http://localhost:8000/usuarios/editarsenha/`, {
+        API
+            .patch(Backend+`/usuarios/editarsenha/`, {
                 senha: data.oldPassword,
                 novaSenha: data.newPassword
             },

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { IArquivo, IPostagem } from "../../Interface";
 import axios from "axios";
 import { Box } from "@mui/material";
+import { API, Backend } from "../../axios/axios";
 
 
 
@@ -14,8 +15,8 @@ export const MediaPostagem = ({ postagem }: MediaPostageProps) => {
 
     useEffect(() => {
 
-        axios
-            .get<{ response: IArquivo[] }>(`http://localhost:8000/postagens/arquivos/${postagem.pos_id}/`)
+        API
+            .get<{ response: IArquivo[] }>(Backend+`/postagens/arquivos/${postagem.pos_id}/`)
             .then(({ data }) => {
                 setArquivo(data.response[0]);
             })
@@ -31,11 +32,11 @@ export const MediaPostagem = ({ postagem }: MediaPostageProps) => {
         const extensao = arquivo.arq_caminho.split('.').pop()?.toLocaleString();
 
         if (extensao === 'jpg' || extensao === 'jpeg' || extensao === 'png' || extensao === 'webp') {
-            return <img src={`http://localhost:8000/${arquivo.arq_caminho}`} alt="Imagem" />;
-        } else if (extensao === 'mp4' || extensao === 'webm' || extensao === 'ogg') {
-            return <video controls src={`http://localhost:8000/${arquivo.arq_caminho}`} />;
-        } else if (extensao === 'mp3' || extensao === 'ogg' || extensao === 'wav' || extensao === 'm4a') {
-            return <audio controls src={`http://localhost:8000/${arquivo.arq_caminho}`} />;
+            return <img src={Backend+`/${arquivo.arq_caminho}`} alt="Imagem" />;
+        } else if (extensao === 'mp4' || extensao === 'webm' || extensao === 'ogg' || extensao === 'mkv') {
+            return <video controls src={Backend+`/${arquivo.arq_caminho}`} />;
+        } else if (extensao === 'mp3' || extensao === 'ogg' || extensao === 'wav' || extensao === 'm4a' || extensao === 'mkv') {
+            return <audio controls src={Backend+`/${arquivo.arq_caminho}`} />;
         } else {
             return <p>Formato de arquivo não suportado para reprodução no navegador</p>;
         }

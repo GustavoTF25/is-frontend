@@ -10,12 +10,15 @@ import {
   Link,
   TextField,
   CircularProgress,
+  Grid,
 } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { StyledTextField } from "../../Themes";
 import { useState } from "react";
+import { Backend } from "../../axios/axios";
+import logo from "../../assets/logo2.png"; // Importa a logo
 
 export const LoginUsuario = () => {
   const navigate = useNavigate();
@@ -41,7 +44,7 @@ export const LoginUsuario = () => {
   const loginUser = (data: LoginFormData) => {
     setIsLoading(true);
     axios
-      .post("http://localhost:8000/usuarios/login", {
+      .post(Backend+"/usuarios/login", {
         email: data.email,
         senha: data.password,
       })
@@ -62,12 +65,12 @@ export const LoginUsuario = () => {
   };
 
   return (
-    <Container maxWidth={"md"}>
+    <Container maxWidth={"lg"}>
       <Box
         margin={6}
-        maxWidth={800}
-        height={550}
-        maxHeight={900}
+        maxWidth={1000}
+        height={800}
+        maxHeight={1000}
         //sx={{ backgroundColor: "#BA5AFA" }}
         display={"flex"}
         gap={1}
@@ -77,12 +80,18 @@ export const LoginUsuario = () => {
         borderRadius={"15px"}
         component={Paper}
         boxShadow={2}
-      >
+      >  <Grid container spacing={2} alignItems="center" justifyContent="center">
+      <Grid item xs={12} md={5}>
+          <Box display="flex" justifyContent="center">
+              <img src={logo} alt="Logo" style={{ width: '100%', maxWidth: '200px' }} /> {/* Adiciona a logo */}
+          </Box>
+      </Grid>
+      <Grid item xs={12} md={7}>
         <Box
           display={"flex"}
           flexDirection={"column"}
           gap={3}
-          width={400}
+          width="80%"
           component="form"
           onSubmit={handleSubmit(loginUser)}
         >
@@ -110,7 +119,7 @@ export const LoginUsuario = () => {
             color="pedro"
           />
           <Box display={"flex"} justifyContent={"end"}>
-            <Link href="/recuperarSenha" color={"#fff"}>
+            <Link href="/recuperarSenha" color="#2104ab">
               Esqueceu a Senha?
             </Link>
           </Box>
@@ -142,6 +151,8 @@ export const LoginUsuario = () => {
             </Box>
           </Box>
         </Box>
+        </Grid>
+        </Grid>
       </Box>
     </Container>
   );

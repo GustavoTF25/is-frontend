@@ -3,7 +3,7 @@ import { CardPostagem } from "../../Components/CardPostagem/CardPostagem"
 import logo from '../../assets/logo2.png'
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API } from "../../axios/axios"
+import { API, Backend } from "../../axios/axios"
 import { IPostagem } from "../../Interface";
 
 
@@ -14,8 +14,8 @@ export const HomePage = () => {
 
     useEffect(() => {
 
-        axios
-            .get<{ response: IPostagem[] }>('http://localhost:8000/postagens/')
+        API
+            .get<{ response: IPostagem[] }>(Backend+'/postagens/')
             .then(({ data }) => {
                 setListaPostagem(data.response);
 

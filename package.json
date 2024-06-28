@@ -7,6 +7,8 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
     "@hookform/resolvers": "^3.3.2",
+    "@mkyy/mui-search-bar": "^0.5.2",
+    "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.14.16",
     "@mui/material-next": "^6.0.0-alpha.108",
     "@mui/styled-engine-sc": "^6.0.0-alpha.4",

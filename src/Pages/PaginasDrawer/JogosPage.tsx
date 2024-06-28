@@ -7,6 +7,7 @@ import axios from "axios";
 import { ICategorias } from "../../Interface";
 import { HomeCategoria } from "../../Components/HomeCategorias/HomeCategorias";
 import Pagina404 from "../Pagina404/Pagina404";
+import { API, Backend } from "../../axios/axios";
 
 
 
@@ -18,8 +19,8 @@ export const JogosPage = () => {
 
 
     useEffect(() => {
-        axios
-            .get<{ response: ICategorias[] }>(`http://localhost:8000/postagens/listarNome/Jogos`)
+        API
+            .get<{ response: ICategorias[] }>(Backend+`/postagens/listarNome/Jogos`)
             .then(({ data }) => {
                 setCategoria(data.response[0]);
                 console.log(categoria)

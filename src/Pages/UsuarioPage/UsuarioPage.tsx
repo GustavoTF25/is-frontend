@@ -1,32 +1,42 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { IPostagem,IUsuario } from "../../Interface";
+import { useNavigate } from "react-router-dom";
+import { IPostagem, IUsuario } from "../../Interface";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Box, Container, Paper, Grid, CardMedia, Typography, Button, TextField } from "@mui/material";
 import { ImagemUsuario } from "../../Components/ImagemUsuario/ImagemUsuario";
 import { CardPostagem } from "../../Components/CardPostagem/CardPostagem";
-
-
-
-
+import { API, Backend } from "../../axios/axios";
+import { jwtDecode }  from "jwt-decode";
 
 export const UsuarioPage = () => {
-    const { usu_id } = useParams();
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
+    const [usu_id, setUsuId] = useState<number | null>(null);
     const [usuario, setUsuario] = useState<IUsuario | null>(null);
     const [listaPostagem, setListaPostagem] = useState<IPostagem[]>([]);
     const [biografia, setBiografia] = useState("");
     const [editandoBiografia, setEditandoBiografia] = useState(false);
-    
 
     useEffect(() => {
-        axios
-            .get<{ response: IUsuario[] }>(
-                `http://localhost:8000/usuarios/${usu_id}/`
-            )
+        if (token) {
+            try {
+                const decodedToken = jwtDecode<{ usu_id: number }>(token);
+                setUsuId(decodedToken.usu_id);
+            } catch (error) {
+                console.error("Erro ao decodificar o token:", error);
+            }
+        }
+    }, [token]);
+
+    useEffect(() => {
+        if (usu_id) {
+            API.get<{ response: IUsuario[] }>(`${Backend}/usuarios/perfil/${usu_id}/`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
             .then(({ data }) => {
                 setUsuario(data.response[0]);
+                setBiografia(data.response[0].usu_bio || "");
             })
             .catch((error) => {
                 console.error("Erro ao obter detalhes do usuario:", error);
@@ -35,51 +45,40 @@ export const UsuarioPage = () => {
                     console.log("Status do servidor:", error.response.status);
                 }
             });
-    }, []);
-    useEffect(() => {
+        }
+    }, [usu_id, token]);
 
-        axios
-            .get<{ response: IPostagem[] }>(`http://localhost:8000/postagens/detalhe/${usu_id}`)
+    useEffect(() => {
+        if (usu_id) {
+            API.get<{ response: IPostagem[] }>(`${Backend}/postagens/detalhe/perfil/${usu_id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
             .then(({ data }) => {
                 setListaPostagem(data.response);
-               // console.log("chamou o id do usuario")
             })
             .catch((error) => {
                 console.error('Erro ao obter postagens:', error);
             });
-    }, []);
-   
-    useEffect(() => {
-        axios
-            .get<{ response: IUsuario[] }>(`http://localhost:8000/usuarios/${usu_id}/`)
-            .then(({ data }) => {
-                setUsuario(data.response[0]);
-                setBiografia(data.response[0].usu_bio || ""); // Inicializa a biografia
-            })
-            .catch((error) => {
-                console.error("Erro ao obter detalhes do usuário:", error);
-                if (error.response) {
-                    console.log("Resposta do servidor:", error.response.data);
-                    console.log("Status do servidor:", error.response.status);
-                }
-            });
-    }, []);
+        }
+    }, [usu_id, token]);
+
     const handleBiografiaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setBiografia(event.target.value);
     };
+
     const handleBiografiaSave = () => {
-        axios
-            .patch(`http://localhost:8000/usuarios/biografia/`, { biografia, usu_id })
-            .then(({ data }) => {
-                setEditandoBiografia(false); 
-                
+        API.patch(`${Backend}/usuarios/biografia/`, { biografia, usu_id })
+            .then(() => {
+                setEditandoBiografia(false);
             })
-           
             .catch((error) => {
                 console.error('Erro ao atualizar a biografia:', error);
             });
     };
-    const formatDate = (isoDate:string | undefined) => {
+
+    const formatDate = (isoDate: string | undefined) => {
         if (!isoDate) return 'Data desconhecida';
         const date = new Date(isoDate);
         const day = String(date.getDate()).padStart(2, '0');
@@ -87,6 +86,33 @@ export const UsuarioPage = () => {
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     };
+
+    const renderPlaceholders = (count: number) => {
+        const placeholders = [];
+        for (let i = 0; i < count; i++) {
+            placeholders.push(
+                <Grid item xs={12} sm={4} key={`placeholder-${i}`}>
+                    <Box
+                        sx={{
+                            width: '100%',
+                            height: 200,
+                            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                            borderRadius: '10px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <Typography variant="h6" color="textSecondary">
+                            
+                        </Typography>
+                    </Box>
+                </Grid>
+            );
+        }
+        return placeholders;
+    };
+
     return (
         <Container maxWidth={"lg"}>
             <Box
@@ -109,7 +135,7 @@ export const UsuarioPage = () => {
                         <CardMedia
                             component="img"
                             height="140"
-                            src={`http://localhost:8000/${usuario?.usu_foto}`}
+                            src={Backend + `/${usuario?.usu_foto}`}
                             sx={{ borderRadius: "10px", maxHeight: '300px' }}
                         />
                     </Grid>
@@ -157,7 +183,7 @@ export const UsuarioPage = () => {
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                        <Box width={'300px'} >
+                        <Box width={'300px'}>
                             <ImagemUsuario />
                         </Box>
                     </Grid>
@@ -165,22 +191,26 @@ export const UsuarioPage = () => {
                         <Box display={'flex'} justifyContent={'space-between'} alignItems="center">
                             <Typography>
                                 Usuário desde {formatDate(usuario?.usu_datacriado)}
-                            </Typography> 
+                            </Typography>
+                            <Typography>
+                                Total de Seguidores {usuario?.usu_totalseguidores}
+                            </Typography>
+                            <Typography>
+                                Total de Postagens {usuario?.usu_totalpublicacao}
+                            </Typography>
                             <Button
                                 variant="contained"
                                 color="secondary"
                                 size='large'
                                 onClick={() => navigate(`/editarSenha/${usu_id}`)}
                             >
-                            Alterar Senha
+                                Alterar Senha
                             </Button>
                         </Box>
                     </Grid>
-
-                    
                 </Grid>
             </Box>
-            <Box marginTop={4} marginLeft={5} >
+            <Box marginTop={4} marginLeft={5}>
                 <Typography variant="h5" gutterBottom>
                     Postagens de {usuario?.usu_nome}
                 </Typography>
@@ -190,6 +220,7 @@ export const UsuarioPage = () => {
                             <CardPostagem postagem={postagem} />
                         </Grid>
                     ))}
+                    {listaPostagem.length < 3 && renderPlaceholders(3 - listaPostagem.length)}
                 </Grid>
             </Box>
         </Container>

@@ -4,6 +4,7 @@ import { Container, Grid } from "@mui/material";
 import { CardPostagem } from "../CardPostagem/CardPostagem";
 import { IPostagem } from "../../Interface";
 import { useParams } from "react-router-dom";
+import { API, Backend } from "../../axios/axios";
 
 
 type HomePesquisaProps = {
@@ -17,8 +18,8 @@ export const HomePesquisa = () => {
 
 
     useEffect(() => {
-        axios
-            .get<{ response: IPostagem[] }>(`http://localhost:8000/postagens/procurar/${query}`)
+        API
+            .get<{ response: IPostagem[] }>(Backend+`/postagens/procurar/${query}`)
             .then(({ data }) => {
                 setListaPostagem(data.response);
             })

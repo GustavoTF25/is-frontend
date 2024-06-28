@@ -4,6 +4,7 @@ import axios from "axios";
 import { Avatar, Box, Typography } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
+import { API, Backend } from "../../axios/axios";
 
 type AutorPostagemProps = {
     postagem: IPostagem;
@@ -17,8 +18,8 @@ export const AutorPostagem = ({ postagem }: AutorPostagemProps) => {
 
 
     useEffect(() => {
-        axios
-            .get<{ response: IUsuario[] }>(`http://localhost:8000/usuarios/${postagem.usu_id}/`)
+        API
+            .get<{ response: IUsuario[] }>(Backend+`/usuarios/${postagem.usu_id}/`)
             .then(({ data }) => {
                 setUsuario(data.response[0]); 
                // onClick={() => navigate(`/usuario/${postagem.usu_id}`)}
@@ -42,7 +43,7 @@ export const AutorPostagem = ({ postagem }: AutorPostagemProps) => {
         <>
             <Avatar
                 alt="foto do autor"
-                src={`http://localhost:8000/${usuario?.usu_foto}`}
+                src={Backend+`/${usuario?.usu_foto}`}
                 onClick={handleUserClick}
                 style={{ cursor: 'pointer' }} // Adiciona um cursor de ponteiro para indicar que é clicável
           

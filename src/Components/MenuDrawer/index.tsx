@@ -42,15 +42,16 @@ export const MenuDrawer = () => {
 
   return (
     <>
-      <IconButton
+      <Button
+        
         size="large"
-        edge="start"
+        variant="contained"
         style={{color: 'white'}}
-        aria-label="logo"
+       
         onClick={() => setIsDrawerOpen(true)}
       >
-        <RiMenuFill />
-      </IconButton>
+        <RiMenuFill size={30} />
+      </Button>
       <Drawer
         anchor="left"
         open={isDrawerOpen}

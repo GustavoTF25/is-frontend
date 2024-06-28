@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Container, Grid, Paper, Typography, Button, Select, TextField, OutlinedInput, MenuItem, Autocomplete, CircularProgress } from '@mui/material';
+import { Box, Container, Grid, Paper, Typography, Button, Select, TextField, OutlinedInput, MenuItem, Autocomplete, CircularProgress, Backdrop } from '@mui/material';
 import { ICategorias } from '../../Interface';
 import { StyledTextField } from '../../Themes';
 import { SelectChangeEvent } from '@mui/material-next';
@@ -10,6 +10,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'react-toastify';
+import { API, Backend } from '../../axios/axios';
 
 
 
@@ -25,8 +26,8 @@ export const CriarPostagem = () => {
     const imagensExtensao = ['jpg', 'jpeg', 'png', 'gif'];
 
     useEffect(() => {
-        axios
-            .get<{ response: ICategorias[] }>('http://localhost:8000/categorias/')
+        API
+            .get<{ response: ICategorias[] }>(Backend+'/categorias/')
             .then(({ data }) => {
                 console.log("data", data.response);
                 console.log("data", data);
@@ -67,7 +68,7 @@ export const CriarPostagem = () => {
             formData.append('capa', data.capa);
 
 
-            await axios.post('http://localhost:8000/postagens/publicar', formData, {
+            await API.post(Backend+'/postagens/publicar', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token}`,
@@ -98,7 +99,7 @@ export const CriarPostagem = () => {
                 gap={1}
                 flexDirection={'column'}
                 justifyItems={'center'}
-                alignItems={'center'}
+                // alignItems={'center'}
                 borderRadius={'15px'}
                 component={Paper}
                 padding={5}
@@ -121,6 +122,7 @@ export const CriarPostagem = () => {
                             <Typography variant='h4' color={'black'} marginTop={'-10rem'}>
                                 Criar Postagem
                             </Typography>
+                            
                             <Box
                                 display={'flex'}
                                 justifyContent={'center'}
@@ -169,14 +171,17 @@ export const CriarPostagem = () => {
                         </Grid>
                         <Grid item xs={6}>
                             <Box
+
                                 display={'flex'}
                                 justifyContent={'center'}
                                 flexDirection={'column'}
                                 width={'400px'}
                                 paddingTop={5}
                                 gap={5}
+                                color='pedro'
                             >
-                                <StyledTextField
+                                <TextField
+                                    variant="outlined"
                                     multiline
                                     label={'Descrição'}
                                     {...register('descricao')}

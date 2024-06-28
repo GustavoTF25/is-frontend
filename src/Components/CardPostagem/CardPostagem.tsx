@@ -16,6 +16,7 @@ import { AiOutlineTag } from "react-icons/ai";
 import { FaUser } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API, Backend } from "../../axios/axios";
 
 type CardPostagemProps = {
   postagem: IPostagem;
@@ -27,9 +28,9 @@ export const CardPostagem = ({ postagem }: CardPostagemProps) => {
   const [usuario, setUsuario] = useState<IUsuario | null>(null);
 
   useEffect(() => {
-    axios
+   API
       .get<{ response: IUsuario[] }>(
-        `http://localhost:8000/usuarios/${postagem.usu_id}/`
+        Backend+`/usuarios/${postagem.usu_id}/`
       )
       .then(({ data }) => {
         setUsuario(data.response[0]);
@@ -54,7 +55,7 @@ export const CardPostagem = ({ postagem }: CardPostagemProps) => {
             height="200px"
             image={
               postagem.pos_capa
-                ? `http://localhost:8000/${postagem.pos_capa}`
+                ? (Backend+`/${postagem.pos_capa}`)
                 : logo
             }
             sx={{ borderRadius: "5px", maxHeight: "200px" }}

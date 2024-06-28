@@ -19,6 +19,9 @@ import { Comentar } from "../../Components/Comentar/Comentar";
 import { CurtirPostagem } from "../../Components/CurtirPostagem/CurtirPostagem";
 import { MediaPostagem } from "../../Components/MediaPostagem/MediaPostagem";
 import { toast } from "react-toastify";
+import { API, Backend } from "../../axios/axios";
+import { MdCloudDownload } from "react-icons/md";
+
 
 export const DetalhePostagens = () => {
   const { pos_id } = useParams();
@@ -29,7 +32,7 @@ export const DetalhePostagens = () => {
   const handleDownload = async () => {
     if (token) {
       try {
-        const response = await fetch(`http://localhost:8000/postagens/baixar/${pos_id}`, {
+        const response = await fetch(Backend + `/postagens/baixar/${pos_id}`, {
           headers: {
             //Authorization: `Bearer ${token}`, // Se necessário para autenticação
           },
@@ -44,12 +47,16 @@ export const DetalhePostagens = () => {
 
         // Cria um URL para o Blob
         const url = URL.createObjectURL(blob);
-        const arquivonome = response.headers.get('Content-Disposition')?.split('filename=')[1];
+        
+        // Extrai o nome do arquivo do cabeçalho Content-Disposition
+        const contentDisposition = response.headers.get('Content-Disposition');
+        const fileNameMatch = contentDisposition ? contentDisposition.match(/filename="?([^"]+)"?$/) : null;
+        const fileName = fileNameMatch ? fileNameMatch[1] : '';
+
         // Cria um link temporário
         const link = document.createElement('a');
         link.href = url;
-        link.download = ''; // Substitua pelo nome desejado
-
+        link.download = fileName;
 
         // Adiciona o link ao DOM e simula um clique
         document.body.appendChild(link);
@@ -64,19 +71,12 @@ export const DetalhePostagens = () => {
         console.error('Erro na requisição de download:', error);
       }
     } else {
-      toast.error('Necessario estar logado')
+      toast.error('Necessário estar logado');
     }
   };
 
-
-
-
-
   useEffect(() => {
-    axios
-      .get<{ response: IPostagem[] }>(
-        `http://localhost:8000/postagens/${pos_id}/`
-      )
+    API.get<{ response: IPostagem[] }>(`/postagens/${pos_id}/`)
       .then(({ data }) => {
         setPostagem(data.response[0]);
       })
@@ -87,7 +87,9 @@ export const DetalhePostagens = () => {
           console.log("Status do servidor:", error.response.status);
         }
       });
-  }, []);
+  }, [pos_id]);
+
+
 
   return (
     postagem && (
@@ -111,9 +113,11 @@ export const DetalhePostagens = () => {
               <CardMedia
                 component="img"
                 height="140"
+                style={{maxHeight: 200}}
+
                 image={
                   postagem?.pos_capa
-                    ? `http://localhost:8000/${postagem?.pos_capa}`
+                    ? Backend + `/${postagem?.pos_capa}`
                     : logo
                 }
                 sx={{ borderRadius: "5px" }}
@@ -162,9 +166,11 @@ export const DetalhePostagens = () => {
                 paddingTop={2}
               >
                 <Button onClick={handleDownload} variant="contained" color="secondary">
-                  Baixar
+                  <MdCloudDownload size={30}/>
                 </Button>
-                <CurtirPostagem postagem={postagem} />
+                 
+                <CurtirPostagem postagem={postagem}  />
+               
               </Box>
             </Grid>
             <Grid item xs={12}>
@@ -177,7 +183,6 @@ export const DetalhePostagens = () => {
               </Box>
               {token ? (
                 <>
-                  {" "}
                   <Comentar postagem={postagem} />
                   <ComentariosPostagem postagem={postagem} />
                 </>
@@ -192,7 +197,7 @@ export const DetalhePostagens = () => {
                     alignItems={"center"}
                   >
                     <Typography>
-                      Usuario prescisa estar logado para comentar
+                      Usuário precisa estar logado para comentar
                     </Typography>
                     <Box
                       display={"flex"}
@@ -203,14 +208,14 @@ export const DetalhePostagens = () => {
                     >
                       <Button
                         variant="text"
-                        color="pedro"
+                        color="primary"
                         onClick={() => navigate("/cadastroUsuario")}
                       >
                         Cadastrar
                       </Button>
                       <Button
                         variant="text"
-                        color="pedro"
+                        color="primary"
                         onClick={() => navigate("/login")}
                       >
                         Logar

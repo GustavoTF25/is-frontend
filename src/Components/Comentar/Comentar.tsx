@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import eventBus from "../../EventBus/eventBus";
+import { API, Backend } from "../../axios/axios";
 
 type ComentariosPostagemProps = {
   postagem: IPostagem;
@@ -32,7 +33,7 @@ export const Comentar = ({ postagem }: ComentariosPostagemProps) => {
       const userID = tokenDecodificado?.usu_id;  // <-- Renomeie aqui
       const userName = tokenDecodificado?.usu_foto;
       // Suponha que você tenha um endpoint no seu backend para obter as informações do usuário
-      fetch(`http://localhost:8000/usuarios/${userID}`, {
+      fetch(Backend+`/usuarios/${userID}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${userToken}`
@@ -63,9 +64,9 @@ export const Comentar = ({ postagem }: ComentariosPostagemProps) => {
   });
 
   const ComentarPostagem = (data: ComentarFormData) => {
-    axios
+    API
       .post(
-        `http://localhost:8000/postagens/comentar/${postagem.pos_id}/`,
+        Backend+`/postagens/comentar/${postagem.pos_id}/`,
         {
           com_texto: data.com_texto,
         },
@@ -92,7 +93,7 @@ export const Comentar = ({ postagem }: ComentariosPostagemProps) => {
     <Box component="form" onSubmit={handleSubmit(ComentarPostagem)}>
       <Box display={"flex"} flexDirection={"row"} gap={2}>
         <Avatar
-          src={`http://localhost:8000/${usuFoto}`}
+          src={(Backend+`/${usuFoto}`)}
 
         />
         <TextField

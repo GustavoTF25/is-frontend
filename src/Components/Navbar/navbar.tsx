@@ -4,16 +4,21 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { Avatar, Drawer, TextField } from "@mui/material";
+import { Avatar, Drawer, TextField, colors } from "@mui/material";
 import { MenuDrawer } from "../MenuDrawer";
-import { SearchBar } from "../SearchBar/SearchBar";
+import {  Searchbar } from "../Searchbar/Searchbar";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toUSVString } from "util";
 import { makeStyles, rgbToHex } from '@mui/material/styles';
-
+import { Backend } from "../../axios/axios";
+import IconButton from "../IconButton/IconButton";
+import { MdDynamicFeed, MdExitToApp, MdFeaturedPlayList, MdFeedback, MdPersonAdd, MdRssFeed } from "react-icons/md";
+import { MdAddBox } from "react-icons/md";
+import { LogInIcon } from "lucide-react";
+import  AppRegistrationIcon  from '@mui/icons-material/AppRegistration';
 export const Navbar = () => {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(null);
@@ -58,7 +63,7 @@ export const Navbar = () => {
           
         const userID = tokenDecodificado?.usu_id;  
         const userName = tokenDecodificado?.usu_nome;
-        fetch(`http://localhost:8000/usuarios/${userID}`, {
+        fetch(Backend+`/usuarios/${userID}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${userToken}`
@@ -116,31 +121,46 @@ export const Navbar = () => {
       <AppBar position="fixed" color='primary'  >
         <Toolbar>
           <Box paddingRight={2} display={'flex'} color={'inherit'}>
+            
             <MenuDrawer />
+            
           </Box>
+          <Button variant="contained">
           <Typography variant="h6" component={Button} onClick={() => navigate('/')} color={'white'} style={{fontFamily: 'monospace'}}>
             IndieShowcase
           </Typography>
+          </Button>
           <Box display={'flex'} justifyContent={'center'} sx={{ flexGrow: 1 }}>
-            <SearchBar />
+            <Searchbar />
           </Box>
           {token ? (
             <Box gap={1} display={'flex'}>
               <Avatar
-                src={`http://localhost:8000/${usuFoto}`}
+                src={Backend+`/${usuFoto}`}
               />
-              <Button style={{color: 'white'}} variant='text' onClick={() => navigate(`/perfil/${userID}`)}> {userName}  </Button>
-              <Button style={{color: 'white'}} variant='text' onClick={() => navigate('/criarPostagem')}>Publicar</Button>
-              <Button variant='text' style={{color:'white'}} onClick={() => {
+              <Button style={{color: "white"}} variant='contained' onClick={() => navigate(`/perfil`)}> {userName}  </Button>
+              <Button color="primary" variant='contained' title="Seguindo" onClick={() => navigate(`/feed`)}><MdRssFeed color="white" size={30} /></Button>
+              {/* <Button style={{color: 'white'}} variant='text' onClick={() => navigate('/criarPostagem')}>Publicar</Button> */}
+              <Button  color="primary" variant="contained" title="Criar postagem" onClick={() => navigate('/criarPostagem')}><MdAddBox  color="white" size={30} />
+              </Button>
+               
+              <Button 
+              color="primary"
+              variant="contained"
+              title="Sair"
+              onClick={() => {
                 localStorage.removeItem('token');
                 navigate('/');
                 window.location.reload();
-              }}>Logout</Button>
+              }}>
+                {/*style={{ color: 'white' , background: ''}} */}
+              <MdExitToApp color="white" size="30" />
+              </Button>
             </Box>
           ) : (
             <Box gap={1} display={'flex'}>
-              <Button style={{color: 'white'}} variant='text' onClick={() => navigate('/cadastroUsuario')}>Cadastrar</Button>
-              <Button variant='text' style={{color: 'white'}} onClick={() => navigate('/login')}>Login</Button>
+              <Button title="Cadastro" color="primary" style={{color: 'white'}} variant='contained' onClick={() => navigate('/cadastroUsuario')}> <MdPersonAdd size={30} /> </Button>
+              <Button title="Login" color="primary" variant='contained' style={{color: 'white'}} onClick={() => navigate('/login')}> <LogInIcon size={30}/> </Button>
             </Box>
           )}
         </Toolbar>

@@ -16,14 +16,15 @@ import axios from "axios";
 import { ICategorias } from "../../Interface";
 import { HomeCategoria } from "../../Components/HomeCategorias/HomeCategorias";
 import Pagina404 from "../Pagina404/Pagina404";
+import { API, Backend } from "../../axios/axios";
 
 export const SoftwarePage = () => {
   const [categoria, setCategoria] = useState<ICategorias | null>(null);
 
   useEffect(() => {
-    axios
+    API
       .get<{ response: ICategorias[] }>(
-        `http://localhost:8000/postagens/listarNome/Software`
+        Backend+`/postagens/listarNome/Software`
       )
       .then(({ data }) => {
         setCategoria(data.response[0]);
