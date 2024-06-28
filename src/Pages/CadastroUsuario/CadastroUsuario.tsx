@@ -18,8 +18,11 @@ export const CadastroUsuario = () => {
         name: z.string().nonempty('Campo obrigatório'),
         email: z.string().nonempty('Campo obrigatório').email('Formato de email inválido'),
         idade: z.string().nonempty('Campo obrigatório'),
-        password: z.string().nonempty('Campo obrigatório').min(8, 'A senha precisa de no mínimo 8 caracteres'),
-        confirmPassword: z.string().nonempty('Campo obrigatório')
+        password: z.string()
+            .nonempty('Campo obrigatório')
+            .min(8, 'A senha precisa de no mínimo 8 caracteres')
+            .regex(/^(?=.*[A-Z])(?=.*[!@#$%^&*])/, 'A senha precisa ter pelo menos uma letra maiúscula e um caractere especial'),
+          confirmPassword: z.string().nonempty('Campo obrigatório')
     }).refine((fields) => fields.password === fields.confirmPassword, {
         path: ['confirmPassword'],
         message: 'As senhas precisam ser iguais'
