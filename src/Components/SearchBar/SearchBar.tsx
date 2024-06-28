@@ -1,11 +1,10 @@
 import { MdOutlineSearch, MdOutlineCancel, MdSearch } from "react-icons/md";
-import { Box, Button, IconButton, InputAdornment, TextField, colors, useColorScheme } from '@mui/material';
+import { Box, Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import SearchBar from "@mkyy/mui-search-bar";
 
 export const Searchbar = () => {
     const [value, setValue] = useState("");
@@ -31,6 +30,7 @@ export const Searchbar = () => {
         navigate(`/query/${data.query}`);
         reset(); // Limpa o campo de pesquisa após o envio
         setValue(""); // Reseta o valor do estado
+        window.location.reload(); // Recarrega a página após a pesquisa
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -39,10 +39,13 @@ export const Searchbar = () => {
             handleSubmit(PesquisarPostagem)(); // Submete o formulário ao pressionar Enter
         }
     };
+
     const handleSearch = (query: string) => {
         navigate(`/query/${query}`);
         setValue(""); // Reseta o valor do estado
+        window.location.reload(); // Recarrega a página após a pesquisa
     };
+
     return (
         <Box component="form" onSubmit={handleSubmit(PesquisarPostagem)}>
             <Box display={"flex"} flexDirection={"row"} gap={2}>
@@ -90,6 +93,7 @@ export const Searchbar = () => {
                                 onClick={() => {
                                     setValue("");
                                     navigate('/');
+                                    window.location.reload(); // Recarrega a página após limpar a pesquisa
                                 }}
                             >
                                 <MdOutlineCancel />
@@ -102,5 +106,5 @@ export const Searchbar = () => {
                 </Button>
             </Box>
         </Box>
-     );
+    );
 };
